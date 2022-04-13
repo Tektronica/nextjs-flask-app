@@ -8,18 +8,18 @@ export default function Home() {
           <li>Examples
             <ul>
               <li>
-                <Link href="./examples/api-request">
+                <Link href="/examples/api-request">
                   <a>api requests</a></Link>
               </li>
               
               <li>
-                <Link href="./examples/layout-example">
+                <Link href="/examples/layout-example">
                   <a>layout example</a>
                 </Link>
               </li>
 
               <li>
-                <Link href="./examples/holy-grail">
+                <Link href="/examples/holy-grail">
                   <a>Holy Grail Layout</a>
                 </Link>
               </li>
