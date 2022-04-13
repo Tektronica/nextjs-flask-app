@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { connectToDatabase } from '../api/mongodb';
-import { getMetars } from '../api/metars';
+import { connectToMetars } from '../api/metars';
 
-export default function Requests({ movies }) {
+export default function Requests({ movies, metars }) {
     const [currentTime, setCurrentTime] = useState(0);
 
     useEffect(() => {
@@ -24,16 +24,16 @@ export default function Requests({ movies }) {
                     {/* Python api */}
                     <div className='text-justify'>
                         <h2 className="text-xl text-cyan-600 uppercase">python api through flask</h2>
-                        <p className="bg-blue-200">
+                        <p className="bg-slate-700 truncate text-xs sm:text-sm text-left text-white">
                             Current time is: {Date(currentTime)}
                         </p>
                     </div>
 
                     {/* metar api */}
                     <div className='text-justify'>
-                        <h2 className="text-xl text-cyan-600 uppercase">python api through flask</h2>
-                        <p className="bg-blue-200">
-                            Current time is: {Date(currentTime)}
+                        <h2 className="text-xl text-cyan-600 uppercase">metar api</h2>
+                        <p className="bg-slate-700 truncate text-xs sm:text-sm text-left text-white">
+                            {metars}
                         </p>
                     </div>
 
@@ -44,8 +44,8 @@ export default function Requests({ movies }) {
                             first ten entries:
                         </p>
                         <ul>
-                            {movies.map((movie) => (
-                                <li>
+                            {movies.map((movie, index) => (
+                                <li key={index + 1}>
                                     <h2 className="text-cyan-800 bg-gray-200 font-bold">{movie.title}</h2>
                                     <h3>Metacritic: {movie.metacritic}</h3>
                                     <p>Plot: {movie.plot}</p>
@@ -65,6 +65,18 @@ export default function Requests({ movies }) {
 // It won't be called on client-side, so you can even do
 // direct database queries.
 export async function getServerSideProps() {
+    const movies = await getMongo()
+    const metars = await getMetars()
+
+    return {
+        props: {
+            movies: JSON.parse(JSON.stringify(movies)),
+            metars: metars,
+        },
+    };
+}
+
+async function getMongo() {
     const { db } = await connectToDatabase()
 
     const movies = await db
@@ -74,11 +86,15 @@ export async function getServerSideProps() {
         .limit(5)
         .toArray();
 
-    return {
-        props: {
-            movies: JSON.parse(JSON.stringify(movies)),
-        },
-    };
+    return movies
 }
+
+async function getMetars() {
+
+    const metars = await connectToMetars()
+    console.log(metars)
+    return metars
+}
+
 
 
