@@ -1,4 +1,4 @@
-export async function getMetars() {
+export async function connectToMetars() {
     const url = 'https://aviationweather.gov/adds/dataserver_current/httpparam?dataSource=metars&requestType=retrieve&format=xml&hoursBeforeNow=3&mostRecent=true&stationString=PHNL%20KSEA'
     const xml_response = await fetch(url)
     const xmlText = await xml_response.text()
@@ -7,7 +7,5 @@ export async function getMetars() {
         xmlText.lastIndexOf("<raw_text>") + 10,
         xmlText.lastIndexOf("</raw_text>"))
 
-    return {
-        metarsData
-    }
+    return metarsData
 }
