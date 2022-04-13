@@ -33,7 +33,10 @@ export default function Requests({ movies, metars }) {
                     <div className='text-justify'>
                         <h2 className="text-xl text-cyan-600 uppercase">metar api</h2>
                         <p className="bg-slate-700 truncate text-xs sm:text-sm text-left text-white">
-                            {metars}
+                            {metars.data}
+                        </p>
+                        <p className="">
+                            Updated at: {metars.time}
                         </p>
                     </div>
 
@@ -92,7 +95,7 @@ async function getMongo() {
 async function getMetars() {
 
     const metars = await connectToMetars()
-    console.log(metars)
+
     return metars
 }
 

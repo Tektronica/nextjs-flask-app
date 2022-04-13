@@ -6,6 +6,10 @@ export async function connectToMetars() {
     var metarsData = xmlText.substring(
         xmlText.lastIndexOf("<raw_text>") + 10,
         xmlText.lastIndexOf("</raw_text>"))
+    
+    var metarsTime = xmlText.substring(
+        xmlText.lastIndexOf("<observation_time>") + 18,
+        xmlText.lastIndexOf("</observation_time>"))
 
-    return metarsData
+    return { data: metarsData, time: metarsTime }
 }
