@@ -41,6 +41,36 @@ export default function Home() {
             </Link>
           </li>
 
+          <li>Bokeh Ploting
+            {/* nested start */}
+            <ul>
+              <li>
+                <Link href="/bokeh-project/client-heartbeat">
+                  <a>heartbeat</a></Link>
+              </li>
+
+              <li>
+                <Link href="/bokeh-project/axios-example">
+                  <a>axios</a>
+                </Link>
+              </li>
+
+              <li>
+                <Link href="/bokeh-project/serve-static">
+                  <a>serve static data</a>
+                </Link>
+              </li>
+
+              <li>
+                <Link href="/bokeh-project/serve-realtime">
+                  <a>serve dynamic data in real time</a>
+                </Link>
+              </li>
+
+              {/* nested end */}
+            </ul >
+          </li>
+
           <li>
             <Link href="https://personal-website-tektronica.vercel.app/">
               <a>Portfolio</a>
