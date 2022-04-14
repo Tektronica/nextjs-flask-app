@@ -5,6 +5,6 @@ const nextConfig = {
 
 module.exports = {
   images: {
-    domains: ['cdn.jsdelivr.net'],
+    domains: ['cdn.jsdelivr.net', 'apod.nasa.gov'],
   },
 };

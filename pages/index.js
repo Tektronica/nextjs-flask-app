@@ -6,12 +6,13 @@ export default function Home() {
       <div>
         <ul>
           <li>Examples
+            {/* nested start */}
             <ul>
               <li>
                 <Link href="/examples/api-request">
                   <a>api requests</a></Link>
               </li>
-              
+
               <li>
                 <Link href="/examples/layout-example">
                   <a>layout example</a>
@@ -23,18 +24,35 @@ export default function Home() {
                   <a>Holy Grail Layout</a>
                 </Link>
               </li>
+
+              <li>
+                <Link href="/examples/nasa-image">
+                  <a>NASA image of the day</a>
+                </Link>
+              </li>
+
+              {/* nested end */}
             </ul >
           </li>
+
           <li>
-                <Link href="https://personal-website-tektronica.vercel.app/">
-                  <a>Portfolio</a>
-                </Link>
-              </li>
-              <li>
-                <Link href="https://github.com/Tektronica">
-                  <a>Github</a>
-                </Link>
-              </li>
+            <Link href="/examples/data-fetching">
+              <a>Data Fetching</a>
+            </Link>
+          </li>
+
+          <li>
+            <Link href="https://personal-website-tektronica.vercel.app/">
+              <a>Portfolio</a>
+            </Link>
+          </li>
+
+          <li>
+            <Link href="https://github.com/Tektronica">
+              <a>Github</a>
+            </Link>
+          </li>
+
         </ul >
       </div >
     </>
