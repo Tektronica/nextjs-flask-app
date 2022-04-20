@@ -5,7 +5,7 @@ export default function staticPlot() {
     // const [currentTime, setCurrentTime] = useState(0);
     // window.Bokeh.embed.embed_item(resp.data, 'testPlot')
     useEffect(() => {
-        fetch('../api/proxy/plot').then(res => res.json()).then(data => {
+        fetch('../api/plot').then(res => res.json()).then(data => {
             window.Bokeh.embed.embed_item(data, 'testPlot');
         });
     }, []);
@@ -33,6 +33,7 @@ export default function staticPlot() {
                 id="bokeh-apii"
                 strategy='beforeInteractive'
             />
+
             <h1 className="text-4xl text-cyan-500 font-extrabold">
                 Bokeh Server Static
             </h1>
@@ -55,5 +56,34 @@ export default function staticPlot() {
                 </div>
             </div>
         </>
+    )
+}
+
+
+const Bokeh_Scripts = () => {
+    return (
+        <>
+            <Script
+                src="https://cdnjs.cloudflare.com/ajax/libs/bokeh/2.4.2/bokeh.min.js"
+                id="bokeh"
+                strategy='beforeInteractive'
+            />
+            <Script
+                src="https://cdnjs.cloudflare.com/ajax/libs/bokeh/2.4.2/bokeh-widgets.min.js"
+                id="bokeh-widgets"
+                strategy='beforeInteractive'
+            />
+            <Script
+                src="https://cdnjs.cloudflare.com/ajax/libs/bokeh/2.4.2/bokeh-tables.min.js"
+                id="bokeh-tables"
+                strategy='beforeInteractive'
+            />
+            <Script
+                src="https://cdnjs.cloudflare.com/ajax/libs/bokeh/2.4.2/bokeh-api.min.js"
+                id="bokeh-apii"
+                strategy='beforeInteractive'
+            />
+        </>
+
     )
 }

@@ -29,7 +29,7 @@ export async function getServerSideProps() {
     const url = `https://api.nasa.gov/planetary/apod?api_key=${process.env.NASA_KEY}`
     const json_response = await fetch(url)
     const json_data = await json_response.json()
-    console.log(json_data)
+
     return {
         props: { nasa: json_data }
     }

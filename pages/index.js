@@ -41,6 +41,23 @@ export default function Home() {
             </Link>
           </li>
 
+          <li>
+            Server Contact
+            <ul>
+              <li>
+                <Link href="/bokeh-project/http-requests">
+                  <a>HTTP requests</a></Link>
+              </li>
+              <li>
+                <Link href="/bokeh-project/example-websocket">
+                  <a>Websocket</a></Link>
+              </li>
+              <li>
+                <Link href="/bokeh-project/sse-handling">
+                  <a>SSE Handling</a></Link>
+              </li>
+            </ul>
+          </li>
           <li>Bokeh Ploting
             {/* nested start */}
             <ul>
@@ -50,8 +67,14 @@ export default function Home() {
               </li>
 
               <li>
-                <Link href="/bokeh-project/axios-example">
-                  <a>axios</a>
+                <Link href="/bokeh-project/add-row">
+                  <a>adding dynamic innerHTML</a>
+                </Link>
+              </li>
+
+              <li>
+                <Link href="/bokeh-project/bokeh-websocket">
+                  <a>Bokeh websocket example</a>
                 </Link>
               </li>
 
@@ -60,9 +83,8 @@ export default function Home() {
                   <a>serve static data</a>
                 </Link>
               </li>
-
               <li>
-                <Link href="/bokeh-project/serve-realtime">
+                <Link href="/bokeh-project/bokeh-stream">
                   <a>serve dynamic data in real time</a>
                 </Link>
               </li>
