@@ -5,92 +5,86 @@ export default function Home() {
     <>
       <div>
         <ul>
-          <li>Examples
-            {/* nested start */}
+
+          <li>Layout Examples
             <ul>
               <li>
-                <Link href="/examples/api-request">
-                  <a>api requests</a></Link>
-              </li>
-
-              <li>
-                <Link href="/examples/layout-example">
-                  <a>layout example</a>
-                </Link>
-              </li>
-
-              <li>
-                <Link href="/examples/holy-grail">
-                  <a>Holy Grail Layout</a>
-                </Link>
-              </li>
-
-              <li>
-                <Link href="/examples/nasa-image">
-                  <a>NASA image of the day</a>
-                </Link>
-              </li>
-
-              {/* nested end */}
-            </ul >
-          </li>
-
-          <li>
-            <Link href="/examples/data-fetching">
-              <a>Data Fetching</a>
-            </Link>
-          </li>
-
-          <li>
-            Server Contact
-            <ul>
-              <li>
-                <Link href="/bokeh-project/http-requests">
-                  <a>HTTP requests</a></Link>
+                <Link href="/layout-examples/layout-example">
+                  <a>Layout Example</a></Link>
               </li>
               <li>
-                <Link href="/bokeh-project/example-websocket">
-                  <a>Websocket</a></Link>
+                <Link href="/layout-examples/holy-grail">
+                  <a>The "Holy Grail" Layout</a></Link>
               </li>
               <li>
-                <Link href="/bokeh-project/sse-handling">
-                  <a>SSE Handling</a></Link>
+                <Link href="/layout-examples/add-row">
+                  <a>innerHTML injection</a></Link>
               </li>
             </ul>
           </li>
-          <li>Bokeh Ploting
-            {/* nested start */}
+
+          <li>HTTP Requests
             <ul>
               <li>
-                <Link href="/bokeh-project/client-heartbeat">
-                  <a>heartbeat</a></Link>
-              </li>
-
-              <li>
-                <Link href="/bokeh-project/add-row">
-                  <a>adding dynamic innerHTML</a>
+                <Link href="/http-examples/http-requests">
+                  <a>HTTP Requests</a>
                 </Link>
               </li>
-
               <li>
-                <Link href="/bokeh-project/bokeh-websocket">
-                  <a>Bokeh websocket example</a>
+                <Link href="/http-examples/api-requests">
+                  <a>API Requests</a>
                 </Link>
               </li>
+              <li>
+                <Link href="/http-examples/data-fetching">
+                  <a>Data Fetching</a></Link>
+              </li>
+              <li>
+                <Link href="/http-examples/nasa-image">
+                  <a>NASA Image of the Day</a></Link>
+              </li>
+            </ul>
+          </li>
 
+          <li>React Hooks
+            <ul>
+              <li>
+                <Link href="/react-hook-examples/client-heartbeat">
+                  <a>Client Heartbeat</a>
+                </Link>
+              </li>
+            </ul>
+          </li>
+
+          <li>Streaming
+            <ul>
+              <li>
+                <Link href="/streaming-examples/websocket-example">
+                  <a>Streaming over socket.io</a>
+                </Link>
+              </li>
+              <li>
+                <Link href="/streaming-examples/sse-handling">
+                  <a>Server Sent Events</a>
+                </Link>
+              </li>
+            </ul>
+          </li>
+
+
+          <li>Bokeh Plotting Project
+            <ul>
               <li>
                 <Link href="/bokeh-project/serve-static">
-                  <a>serve static data</a>
+                  <a>Embedding Bokeh app</a>
                 </Link>
               </li>
               <li>
-                <Link href="/bokeh-project/bokeh-stream">
-                  <a>serve dynamic data in real time</a>
+                <Link href="/bokeh-project/bokeh-websocket">
+                  <a>Streaming Bokeh content over Socket.io</a>
                 </Link>
               </li>
-
-              {/* nested end */}
-            </ul >
+            </ul>
           </li>
 
           <li>

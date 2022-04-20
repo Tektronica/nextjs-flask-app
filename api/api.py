@@ -155,8 +155,10 @@ def bkapp_setup():
 @socketio.on('connect')
 def test_connect():
     client = request.sid
-    print(f'\n>> Client ({client}) connected\n')
-    socketio.emit('to_client', {'data': f'Client ({client}) has connected'})
+
+    server_msg = f'\n>> Client: ({client}) connected\n'
+    print(server_msg)
+    socketio.emit('to_client', {'data': server_msg})
     # thread_this(current_time)
 
 
