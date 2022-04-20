@@ -6,7 +6,7 @@ export default function Requests({ movies, metars }) {
     const [currentTime, setCurrentTime] = useState(0);
 
     useEffect(() => {
-        fetch('../api/proxy/time').then(res => res.json()).then(data => {
+        fetch('../api/time').then(res => res.json()).then(data => {
             setCurrentTime(data.time);
         });
     }, []);

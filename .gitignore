@@ -21,6 +21,7 @@ venv
 *.pem
 __pycache__
 .idea
+*.bak
 
 # debug
 npm-debug.log*
