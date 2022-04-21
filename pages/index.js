@@ -48,7 +48,7 @@ export default function Home() {
               <p className="uppercase font-bold">React Hooks</p>
               <ul>
                 <li>
-                  <Link href="/layout-examples/add-row">
+                  <Link href="/react-hook-examples/add-row">
                     <a className="px-2 hover:bg-indigo-200">innerHTML injection</a></Link>
                 </li>
                 <li>
