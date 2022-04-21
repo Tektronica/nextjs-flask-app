@@ -5,7 +5,7 @@ export default function staticPlot() {
     // const [currentTime, setCurrentTime] = useState(0);
     // window.Bokeh.embed.embed_item(resp.data, 'testPlot')
     useEffect(() => {
-        fetch('../api/plot').then(res => res.json()).then(data => {
+        fetch('../api/plot-fetch').then(res => res.json()).then(data => {
             window.Bokeh.embed.embed_item(data, 'testPlot');
         });
     }, []);
@@ -38,12 +38,19 @@ export default function staticPlot() {
                 Bokeh Server Static
             </h1>
             <p className="pb-2 text-justify">
-                Axios makes it easy to send asynchronous HTTP requests to REST endpoints and perform CRUD operations.
-                JavaScript <code>fetch</code> is an alternative method for creating HTTP requests in JavaScript.
-                There is a different model in which the client takes a more active role. In this model, the client issues a request to the server and the server responds with a web page, but unlike the previous case, not all the page data is HTML, there is also sections of the page with code, typically written in Javascript.
+                Bokeh provides a simple interface for the client to fetch a plot from the server. The client request is routed through the Flask backend to a destination in which the JSON response is the packaged data including the figure object. The figure object contains the information for dimension and automatically determines limits based on the available data. Note, in the next example where we stream data to the client Bokeh app, an empty plot is fetched on render to scaffold the Bokeh model in preparation for new data to append to.
             </p>
             <p className="pb-2 text-justify">
-                Server-Sent Events (SSE) is a standard that enables Web servers to push data in real time to clients.
+                Since a native react Bokeh library does not exist, all api scripts used by the Bokeh app to build or update the plot must be pulled from their CDN server where BokehJS exists. Unfortunately, little documentation exists for the JavaScript client-side api and is still in development. Nevertheless, Tally-ho, I say!
+            </p>
+            <p className="pb-2 text-justify">
+                Once the JSON package arrives, the following code is fired. Note, the data value in this case is the entire plot figure - not just the data structure.
+            </p>
+            <p className="pb-2 text-justify">
+                <code>window.Bokeh.embed.embed_item(data, 'testPlot');</code>
+            </p>
+            <p className="pb-2 text-justify">
+                This code emits the update to the model with a data source titled “testPlot”. This ensures if multiple plots exist, only this one plot is updated on the heap. Note, consecutive updates with this approach resets the view of the plot. So, if the client is using the manipulation tools, any dynamic updates to the view will reset since the plot remounts after each new embed operation.
             </p>
 
             {/* Python api */}

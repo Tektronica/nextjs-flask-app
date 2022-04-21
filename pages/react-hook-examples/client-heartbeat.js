@@ -41,6 +41,9 @@ export default function Heartbeat() {
                 However, if <code>componentWillUnmount</code> is not handled properly using the <code>return</code>,
                 then the effect hook will continue to run even if the component has been unmounted.
             </p>
+            <p className="pb-2 text-justify">
+            The <code>useEffect</code> runs when the component is first rendered, and on every subsequent re-render/update. React first updates the DOM, then calls any function passed to useEffect().
+            </p>
 
             <pre className="mb-2 bg-sky-100 text-justify"><code className="language-javascriptreact">{
                 `useEffect(() => {

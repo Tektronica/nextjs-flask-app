@@ -26,7 +26,7 @@ export default function BokehWebsocket({ context, data }) {
         const s2_figure = Bokeh.documents[0].get_model_by_name('s2')
 
         socket.on('bk_update', function (context) {
-            
+
             data = context['data']
             // limits = context['limits']
 
@@ -41,8 +41,8 @@ export default function BokehWebsocket({ context, data }) {
 
             // self.socketio.emit('bk_update', {'data': self.data, 'limits': limits}, namespace='/test', room=self.room)
             // for (const [idx, [key, value]] of Object.entries(Object.entries(data))) {
-            
-                for (const [idx, [key, value]] of Object.entries(Object.entries(data))) {
+
+            for (const [idx, [key, value]] of Object.entries(Object.entries(data))) {
 
                 // ds.data[key] = value
                 ds.data[key].push(value)
@@ -81,14 +81,20 @@ export default function BokehWebsocket({ context, data }) {
                 Bokeh WebSocket
             </h1>
             <p className="pb-2 text-justify">
-                Axios makes it easy to send asynchronous HTTP requests to REST endpoints and perform CRUD operations.
-                JavaScript <code>fetch</code> is an alternative method for creating HTTP requests in JavaScript.
-                There is a different model in which the client takes a more active role. In this model, the client issues a request to the server and the server responds with a web page, but unlike the previous case, not all the page data is HTML, there is also sections of the page with code, typically written in Javascript.
+                Bokeh supports data streaming in several ways - in the simplest sense, the Python library creates a private socket using a low-level wrapper for Tornado Websockets. However, while convenient, this isn't entirely preferred as it increases the traffic complexity to and from the server broadcasting on a separate port to our Flask environment.
             </p>
             <p className="pb-2 text-justify">
-                Server-Sent Events (SSE) is a standard that enables Web servers to push data in real time to clients.
+                Not surprisingly, using Flask as the backend framework for the nextjs project makes installment of Flask's Socket.io library an easy alternative to Tornado for the framework. Socketio uses familiar syntactic sugaring like the decorator routing available in Flask, which not only maintains coherency, but as well as transparency under the hood. Building our Bokeh app server through our Flask environment provides significant flexibility in creating our own public sockets. For instance, clients can subscribe to different rooms where different bokeh apps are broadcasting from, if necessary.
             </p>
-
+            <p className="pb-2 text-justify">
+                The custom setup for streaming Bokeh apps is by no means trivial as already exercised in the static delivery of an embedded bokeh plot to the client. In the previous example, the BokehJS javascript api was pulled down from their CDN server before the page rendered, which ensured the client had an interface for the server to deliver information to. The data fetched was prepared by the bokeh python library and then simply embedded on the client side. Simple enough in the end, right?
+            </p>
+            <p className="pb-2 text-justify">
+                On the other hand, performing the same embedding for dynamic data being streamed to the client is expensive. “Package”, “embed”, and “update” are the steps sequentially executed at a rate equal to whatever the socket is streaming data at. Not only does this lead to potential race issues where data may stream faster than the Bokeh plot can update, but the plot is no longer accessible to the client as the Bokeh unmounts on every new embed causing the view (plot position) to reset. Not at all convenient!
+            </p>
+            <p className="pb-2 text-justify">
+                The solution is to update the ColumnDataSource structure employed by the Bokeh App. This is the single source of truth which the app builds its plots around. In other words, this structure sources the data to the glyphs of your plot. This is a very important tool when updating Bokeh apps because the same structure that exists in packaging the app server side, also exists as an endpoint for data on the client side. So rather than requiring the server to package the entire data structure before emitting to the client, which gets larger and larger as the data accumulates, we instead only send new data to the client where the callback listens for updates on the broadcasting channel. When new data arrives, it is appended to the ColumnDataSource and the changes emitted to Bokeh client-side model. This method results in an update to what is plotted in the bokeh app rather than an update to the entire object. So, when the client decides they want to manipulate the plot, new data doesn't reset the view.
+            </p>
             {/* Python api */}
             <div className='text-justify'>
                 <h2 className="text-xl text-cyan-600 uppercase">Websocket</h2>
