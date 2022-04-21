@@ -45,15 +45,15 @@ def thread_this(func, args=()):
 
 
 @app.route('/time')
-def get_current_time():
+def get_time():
     return {'time': time.time()}
 
 
-@app.route('/plot')
+@app.route('/plot-fetch')
 def plot():
     data = lissajous.get_lissajous()
 
-    p = figure(title="Plot",
+    p = figure(title="Lissajous",
                width=500, height=500,
                toolbar_location="below",
                )
@@ -98,29 +98,6 @@ def stream():
     return Response(event_stream(), content_type='text/event-stream')
 
 
-@app.route('/plot-stream', methods=['GET', 'POST'])
-def plot_stream():
-    # initialize empty ColumnDataSource
-    source = ColumnDataSource(data={'x_values': [], 'y_values': []})
-
-    p = figure(title="Plot",
-               width=500, height=500,
-               toolbar_location="below",
-               )
-
-    # Providing data as a ColumnDataSource
-    p.circle(x='x_values', y='y_values', source=source)
-
-    # generate data
-    data = lissajous.get_lissajous()
-
-    # simulate stream of new data by iterating over pre-generated data
-    for i, x_value in enumerate(data['x_values']):
-        time.sleep(1)
-        new_data = {'x_values': [x_value], 'y_values': [data['y_values'][i]]}
-        source.stream(new_data, 300)
-
-
 @app.route('/echo', methods=['GET', 'POST', 'PATCH', 'PUT', 'DELETE'])
 def api_echo():
     if flask.request.method == 'GET':
@@ -151,20 +128,69 @@ def bkapp_setup():
 # def bk_start():
 #     thread_this(bk_app)
 
+
 # SocketIO ==============================================================================
+clientList = {}  # dictionary of clients logged in {client: {time: 0}}
+
+
 @socketio.on('connect')
 def test_connect():
+    # check the client in
     client = request.sid
+    clientList[client] = Client(client)
 
-    server_msg = f'\n>> Client: ({client}) connected\n'
-    print(server_msg)
-    socketio.emit('to_client', {'data': server_msg})
-    # thread_this(current_time)
+
+@socketio.on('broadcast-time')
+def broadcast_time(client_msg):
+    # client can request that their time be broadcasted
+    client = request.sid
+    clientList[client].start_broadcasting_time()
+    # client can send a message, but it must be consumed as an arg
+
+
+class Client:
+    def __init__(self, client):
+        self.client = client
+        self.starting_time = datetime.now()
+        self.broadcasting = False
+        self._announce_new_client()
+
+    def _announce_new_client(self):
+        # announce the new client
+        server_msg = f'Client: ({self.client}) connected'
+        print(f'\n\n{server_msg}\n\n')
+
+        # send reciept only to the client
+        socketio.emit('message', {'data': server_msg}, room=self.client)
+
+    def thread_this(self, func, args=()):
+        t = threading.Thread(target=func, args=args, daemon=True)
+        t.start()
+
+    def get_elapsed_time(self):
+        current_time = datetime.now()
+        elapsed = current_time - self.starting_time
+        return datetime.utcfromtimestamp(elapsed.total_seconds()).strftime("%H:%M:%S")
+
+    def start_broadcasting_time(self):
+        self.broadcasting = True
+        self.thread_this(self.broadcast_time)
+
+        # send reciept only to the client
+        server_msg = f'Client: ({self.client}) has requested elapsed time'
+        socketio.emit(self.client, {'data': server_msg})
+
+    def broadcast_time(self):
+        while self.broadcasting:
+            # emit to a specific client using their personal room they are always subscribed to
+            socketio.emit(
+                'client-time', {'data': self.get_elapsed_time()}, room=self.client)
+            time.sleep(5)
 
 
 @socketio.on('disconnect')
 def test_disconnect():
-    print(f'{request.id} has disconnected')
+    print(f'Client has disconnected')
     # socketio.emit('user disconnected',
     #     {'user_id': request.sid, 'message': users[request.sid].username+' disconnected'},
     #     broadcast=True)
@@ -183,13 +209,6 @@ def start_bokeh_app(client_msg):
     server_msg = f'\n>> Client: ({client}) has started a new plot!\n'
     print(server_msg)
     socketio.emit('message', {'data': server_msg})
-
-
-# def current_time():
-#     while True:
-#         timestamp = datetime.now().strftime("%H:%M:%S")
-#         socketio.emit('time', timestamp, namespace='')
-#         time.sleep(3)
 
 
 # ajax bokeh server ======================================================================================
