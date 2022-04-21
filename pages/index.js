@@ -17,10 +17,6 @@ export default function Home() {
                   <Link href="/layout-examples/holy-grail">
                     <a className="px-2 hover:bg-indigo-200">The "Holy Grail" Layout</a></Link>
                 </li>
-                <li>
-                  <Link href="/layout-examples/add-row">
-                    <a className="px-2 hover:bg-indigo-200">innerHTML injection</a></Link>
-                </li>
               </ul>
             </li>
 
@@ -51,6 +47,10 @@ export default function Home() {
             <li className="border-b border-gray-200">
               <p className="uppercase font-bold">React Hooks</p>
               <ul>
+                <li>
+                  <Link href="/layout-examples/add-row">
+                    <a className="px-2 hover:bg-indigo-200">innerHTML injection</a></Link>
+                </li>
                 <li>
                   <Link href="/react-hook-examples/client-heartbeat">
                     <a className="px-2 hover:bg-indigo-200">Client Heartbeat</a>
