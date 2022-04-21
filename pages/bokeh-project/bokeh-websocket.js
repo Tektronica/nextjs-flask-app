@@ -8,7 +8,7 @@ export default function BokehWebsocket({ context, data }) {
 
     useEffect(() => {
         // connect to socket server
-        socket = io.connect('http://127.0.0.1:5000/test');
+        socket = io.connect('http://127.0.0.1:5000');
 
         // log socket connection
         socket.on("connect", () => {
@@ -16,14 +16,14 @@ export default function BokehWebsocket({ context, data }) {
             setConnected(true);
         });
 
-        // log socket connection
+        // broadcasted message
         socket.on("message", (msg) => {
-            console.log(msg);
+            console.log('server:', msg.data);
         });
 
         const ds = Bokeh.documents[0].get_model_by_name('my-data-source');
-        const s1_figure = Bokeh.documents[0].get_model_by_name('s1')
-        const s2_figure = Bokeh.documents[0].get_model_by_name('s2')
+        // const s1_figure = Bokeh.documents[0].get_model_by_name('s1')
+        // const s2_figure = Bokeh.documents[0].get_model_by_name('s2')
 
         socket.on('bk_update', function (context) {
 

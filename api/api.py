@@ -1,3 +1,6 @@
+import lissajous
+from client import Client
+
 from email import header
 import time
 
@@ -19,14 +22,9 @@ from bokeh.layouts import widgetbox, column
 from bokeh.embed import components
 
 import json
-
-from waitress import serve
-from random import random, randint
-
 import threading
 from datetime import datetime
 
-import lissajous
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret!'
@@ -119,7 +117,7 @@ def api_echo():
 # =============================================================================================
 @app.route('/bkapp_setup', methods=['GET', 'POST'])
 def bkapp_setup():
-    bkapp = lissajous.LissajousStream(0)
+    bkapp = lissajous.LissajousStream(0,0)
     context, datatable = bkapp.bkapp_setup()
 
     return {'context': context, 'data': datatable}
@@ -137,7 +135,8 @@ clientList = {}  # dictionary of clients logged in {client: {time: 0}}
 def test_connect():
     # check the client in
     client = request.sid
-    clientList[client] = Client(client)
+    clientList[client] = Client(socketio, client)
+    print(f'\n\n{clientList}\n\n')
 
 
 @socketio.on('broadcast-time')
@@ -148,46 +147,6 @@ def broadcast_time(client_msg):
     # client can send a message, but it must be consumed as an arg
 
 
-class Client:
-    def __init__(self, client):
-        self.client = client
-        self.starting_time = datetime.now()
-        self.broadcasting = False
-        self._announce_new_client()
-
-    def _announce_new_client(self):
-        # announce the new client
-        server_msg = f'Client: ({self.client}) connected'
-        print(f'\n\n{server_msg}\n\n')
-
-        # send reciept only to the client
-        socketio.emit('message', {'data': server_msg}, room=self.client)
-
-    def thread_this(self, func, args=()):
-        t = threading.Thread(target=func, args=args, daemon=True)
-        t.start()
-
-    def get_elapsed_time(self):
-        current_time = datetime.now()
-        elapsed = current_time - self.starting_time
-        return datetime.utcfromtimestamp(elapsed.total_seconds()).strftime("%H:%M:%S")
-
-    def start_broadcasting_time(self):
-        self.broadcasting = True
-        self.thread_this(self.broadcast_time)
-
-        # send reciept only to the client
-        server_msg = f'Client: ({self.client}) has requested elapsed time'
-        socketio.emit(self.client, {'data': server_msg})
-
-    def broadcast_time(self):
-        while self.broadcasting:
-            # emit to a specific client using their personal room they are always subscribed to
-            socketio.emit(
-                'client-time', {'data': self.get_elapsed_time()}, room=self.client)
-            time.sleep(5)
-
-
 @socketio.on('disconnect')
 def test_disconnect():
     print(f'Client has disconnected')
@@ -196,14 +155,14 @@ def test_disconnect():
     #     broadcast=True)
 
 
-@socketio.on('start', namespace='/test')
+@socketio.on('start')
 def start_bokeh_app(client_msg):
     client = request.sid
     print(client_msg)
 
-    # start bokeh plot
-    bkapp = lissajous.LissajousStream(socketio)
-    bkapp.start()
+    # add bokeh plot task
+    print(f'\n\n{clientList}\n\n')
+    clientList[client].add_task('lissajous', lissajous.LissajousStream)
 
     # report activity
     server_msg = f'\n>> Client: ({client}) has started a new plot!\n'

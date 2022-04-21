@@ -41,9 +41,10 @@ def thread_this(func, args=()):
 
 
 class LissajousStream:
-    def __init__(self, socketio):
+    def __init__(self, socketio, client):
         # self.move_to_completed = func  # func
         self.socketio = socketio
+        self.client = client
         # self.room = room  # clients connect to rooms under the namespace /test
 
         # self.n_count = 0
@@ -108,7 +109,6 @@ class LissajousStream:
             self.datatable['y_values'].append(y)
 
             new_data = {'index':idx, 'x_values': x, 'y_values': y}
-
-            self.socketio.emit(
-                'bk_update', {'data': new_data}, namespace='/test')
+            # , namespace='/test'
+            self.socketio.emit('bk_update', {'data': new_data}, room=self.client)
             time.sleep(0.01)
